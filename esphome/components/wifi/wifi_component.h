@@ -181,6 +181,7 @@ class WiFiComponent : public Component {
 
   IPAddress get_ip_address();
   std::string get_use_address() const;
+  std::string get_mac_address() const;
   void set_use_address(const std::string &use_address);
 
   const std::vector<WiFiScanResult> &get_scan_result() const { return scan_result_; }

@@ -9,6 +9,8 @@ namespace esphome {
 bool network_is_connected();
 /// Get the active network hostname
 std::string network_get_address();
+/// Get the mac address
+std::string network_get_mac();
 
 /// Manually set up the network stack (outside of the App.setup() loop, for example in OTA safe mode)
 #ifdef ARDUINO_ARCH_ESP8266

@@ -150,7 +150,11 @@ std::string WiFiComponent::get_use_address() const {
   }
   return this->use_address_;
 }
+std::string WiFiComponent::get_mac_address() const {
+  return this->mac_address_;
+}
 void WiFiComponent::set_use_address(const std::string &use_address) { this->use_address_ = use_address; }
+void WiFiComponent::set_mac_address(const std::string &mac_address) { this->mac_address_ = mac_address; }
 void WiFiComponent::setup_ap_config_() {
   this->wifi_mode_({}, true);
 

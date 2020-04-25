@@ -62,6 +62,7 @@ void network_setup_mdns(IPAddress address, int interface) {
       // DNS-SD (!=mDNS !) requires at least one TXT record for service discovery - let's add version
       MDNS.addServiceTxt("esphomelib", "tcp", "version", ESPHOME_VERSION);
       MDNS.addServiceTxt("esphomelib", "tcp", "address", network_get_address().c_str());
+      MDNS.addServiceTxt("esphomelib", "tcp", "mac_address", network_get_mac().c_str());
     } else {
 #endif
       // Publish "http" service if not using native API.
@@ -87,6 +88,18 @@ void network_setup_mdns(IPAddress address, int interface) {
 #ifdef USE_WIFI
     if (wifi::global_wifi_component != nullptr)
       return wifi::global_wifi_component->get_use_address();
+#endif
+    return "";
+  }
+
+  std::string network_get_mac() {
+#ifdef USE_ETHERNET
+    if (ethernet::global_eth_component != nullptr)
+      return ethernet::global_eth_component->get_mac_address();
+#endif
+#ifdef USE_WIFI
+    if (wifi::global_wifi_component != nullptr)
+      return wifi::global_wifi_component->get_mac_address();
 #endif
     return "";
   }
