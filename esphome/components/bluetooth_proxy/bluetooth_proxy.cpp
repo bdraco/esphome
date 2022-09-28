@@ -158,6 +158,7 @@ void BluetoothProxy::loop() {
   } else if (this->send_service_ >= 0) {
     heap_caps_check_integrity_all(true);
     ESP_LOGD(TAG, "Start send: Free Heap Size: %u bytes", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+    ESP_LOGD(TAG, "Start send: Free MALLOC_CAP_8BIT Size: %u bytes", heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
     auto *service = this->services_[this->send_service_];
     api::BluetoothGATTGetServicesResponse resp;
@@ -183,6 +184,7 @@ void BluetoothProxy::loop() {
     this->send_service_++;
 
     ESP_LOGD(TAG, "End send: Free Heap Size: %u bytes", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+    ESP_LOGD(TAG, "End send: Free MALLOC_CAP_8BIT Size: %u bytes", heap_caps_get_free_size(MALLOC_CAP_8BIT));
     heap_caps_check_integrity_all(true);
 
   }
