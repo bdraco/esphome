@@ -4,6 +4,8 @@
 
 #ifdef USE_ESP32
 
+#include "esp_heap_trace.h"
+
 #ifdef USE_API
 #include "esphome/components/api/api_server.h"
 #endif
