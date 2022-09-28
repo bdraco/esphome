@@ -182,6 +182,8 @@ void BluetoothProxy::loop() {
       service_resp.characteristics.push_back(std::move(characteristic_resp));
     }
     resp.services.push_back(std::move(service_resp));
+    ESP_LOGD(TAG, "Dumping services: %s", resp.dump().c_str());
+
     api::global_api_server->send_bluetooth_gatt_services(resp);
     this->send_service_++;
 
