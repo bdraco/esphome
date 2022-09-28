@@ -105,6 +105,8 @@ void BLEClientBase::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_
       break;
     }
     case ESP_GATTC_CFG_MTU_EVT: {
+      ESP_LOGD(TAG, "ESP_GATTC_CFG_MTU_EVT: Free Heap Size: %u bytes", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+
       if (param->cfg_mtu.status != ESP_GATT_OK) {
         ESP_LOGW(TAG, "cfg_mtu to %s failed, mtu %d, status %d", this->address_str().c_str(), param->cfg_mtu.mtu,
                  param->cfg_mtu.status);
@@ -128,6 +130,8 @@ void BLEClientBase::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_
       break;
     }
     case ESP_GATTC_SEARCH_RES_EVT: {
+      ESP_LOGD(TAG, "ESP_GATTC_SEARCH_RES_EVT: Free Heap Size: %u bytes", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+
       BLEService *ble_service = new BLEService();  // NOLINT(cppcoreguidelines-owning-memory)
       ble_service->uuid = espbt::ESPBTUUID::from_uuid(param->search_res.srvc_id.uuid);
       ble_service->start_handle = param->search_res.start_handle;
@@ -137,6 +141,8 @@ void BLEClientBase::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_
       break;
     }
     case ESP_GATTC_SEARCH_CMPL_EVT: {
+      ESP_LOGD(TAG, "ESP_GATTC_SEARCH_CMPL_EVT: Free Heap Size: %u bytes", heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
+
       ESP_LOGV(TAG, "[%s] ESP_GATTC_SEARCH_CMPL_EVT", this->address_str().c_str());
       for (auto &svc : this->services_) {
         ESP_LOGI(TAG, "Service UUID: %s", svc->uuid.to_string().c_str());
