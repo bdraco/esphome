@@ -129,7 +129,7 @@ void ESP32BLETracker::loop() {
     }
     for (size_t i = 0; i < index; i++) {
       ESPBTDevice device;
-      device.parse_scan_rst(this->scan_result_buffer_[i], this->_scan_active);
+      device.parse_scan_rst(this->scan_result_buffer_[i],this->scan_active_);
 
       bool found = false;
       for (auto *listener : this->listeners_) {
