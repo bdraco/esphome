@@ -121,6 +121,7 @@ void ESP32BLETracker::loop() {
   }
 
   if (xSemaphoreTake(this->scan_result_lock_, 5L / portTICK_PERIOD_MS)) {
+    bool scan_active = this->scan_active_;
     uint32_t index = this->scan_result_index_;
     xSemaphoreGive(this->scan_result_lock_);
 
@@ -129,7 +130,7 @@ void ESP32BLETracker::loop() {
     }
     for (size_t i = 0; i < index; i++) {
       ESPBTDevice device;
-      device.parse_scan_rst(this->scan_result_buffer_[i],this->scan_active_);
+      device.parse_scan_rst(this->scan_result_buffer_[i],scan_active);
 
       bool found = false;
       for (auto *listener : this->listeners_) {
