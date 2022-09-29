@@ -79,7 +79,7 @@ class ESPBLEiBeacon {
 
 class ESPBTDevice {
  public:
-  void parse_scan_rst(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param);
+  void parse_scan_rst(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param, bool scan_active);
 
   std::string address_str() const;
 
