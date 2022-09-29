@@ -79,7 +79,7 @@ class BLEEvent {
       case ESP_GATTC_NOTIFY_EVT:
         ESP_LOGD("main", "ESP_GATTC_NOTIFY_EVT BLEEvent with type %i: len: %d", e, p->read.value_len);
 
-        memcpy(this->event_.gattc.data, p->notify.value, p->notify.value_len);
+        this->event_.gattc.data.assign(p->notify.value, p->notify.value + p->notify.value_len);
         this->event_.gattc.gattc_param.notify.value = this->event_.gattc.data;
         break;
       case ESP_GATTC_READ_CHAR_EVT:
@@ -89,8 +89,7 @@ class BLEEvent {
         //  ESP_LOGD("main", "queue BLEEvent with type %i: pos=%i data=%hhx", e, i, p->read.value[i]);
         //}      
         ESP_LOGD("main", "CHAR_DESC BLEEvent with type %i: len: %d", e, p->read.value_len);
-
-        memcpy(this->event_.gattc.data, p->read.value, p->read.value_len);
+        this->event_.gattc.data.assign(p->read.value, p->read.value + p->read.value_len);
         this->event_.gattc.gattc_param.read.value = this->event_.gattc.data;
         break;
       default:
@@ -109,7 +108,7 @@ class BLEEvent {
       esp_gattc_cb_event_t gattc_event;
       esp_gatt_if_t gattc_if;
       esp_ble_gattc_cb_param_t gattc_param;
-      uint8_t data[64];
+      std::vector<uint8_t> data{};
     } gattc;
   } event_;
   uint8_t type_;  // 0=gap 1=gattc
