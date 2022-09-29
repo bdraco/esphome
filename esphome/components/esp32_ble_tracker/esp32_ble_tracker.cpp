@@ -66,7 +66,7 @@ void ESP32BLETracker::setup() {
 
   esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(64);
   if (local_mtu_ret){
-      ESP_LOGE(GATTC_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
+      ESP_LOGE("gattc", "set local  MTU failed, error code = %x", local_mtu_ret);
   }
 
 #ifdef USE_OTA
