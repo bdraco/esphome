@@ -77,7 +77,7 @@ class BLEEvent {
 
     switch (e) {
       case ESP_GATTC_NOTIFY_EVT:
-        ESP_LOGD("main", "ESP_GATTC_NOTIFY_EVT BLEEvent with type %i: len: %d", e, p->read.value_len);
+        ESP_LOGD("main", "ESP_GATTC_NOTIFY_EVT BLEEvent with type %i: len: %d", e, p->notify.value_len);
 
         this->data.assign(p->notify.value, p->notify.value + p->notify.value_len);
         this->event_.gattc.gattc_param.notify.value = this->data.data();
