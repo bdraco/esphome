@@ -64,10 +64,10 @@ void ESP32BLETracker::setup() {
     return;
   }
 
-  esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(64);
-  if (local_mtu_ret){
-      ESP_LOGE("gattc", "set local  MTU failed, error code = %x", local_mtu_ret);
-  }
+  //esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(64);
+  //if (local_mtu_ret){
+  //    ESP_LOGE("gattc", "set local  MTU failed, error code = %x", local_mtu_ret);
+  //}
 
 #ifdef USE_OTA
   ota::global_ota_component->add_on_state_callback([this](ota::OTAState state, float progress, uint8_t error) {
@@ -92,7 +92,7 @@ void ESP32BLETracker::loop() {
       this->real_gap_event_handler_(ble_event->event_.gap.gap_event, &ble_event->event_.gap.gap_param);
     }
 
-    ESP_LOGD(TAG, "Deleting BLEEvent with type %i", ble_event->event_.gattc.gattc_event);
+    //ESP_LOGD(TAG, "Deleting BLEEvent with type %i", ble_event->event_.gattc.gattc_event);
 
     delete ble_event;  // NOLINT(cppcoreguidelines-owning-memory)
     ble_event = this->ble_events_.pop();
