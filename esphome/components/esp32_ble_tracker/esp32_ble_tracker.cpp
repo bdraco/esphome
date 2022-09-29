@@ -71,7 +71,6 @@ void ESP32BLETracker::setup() {
 }
 
 void ESP32BLETracker::loop() {
-  ESP_LOGD(TAG, "ESP32BLETracker loop");
   BLEEvent *ble_event = this->ble_events_.pop();
   while (ble_event != nullptr) {
     if (ble_event->type_) {
