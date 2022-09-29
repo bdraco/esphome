@@ -109,7 +109,7 @@ class BLEEvent {
       esp_gattc_cb_event_t gattc_event;
       esp_gatt_if_t gattc_if;
       esp_ble_gattc_cb_param_t gattc_param;
-      uint8_t data[512];
+      uint8_t data[64];
     } gattc;
   } event_;
   uint8_t type_;  // 0=gap 1=gattc
