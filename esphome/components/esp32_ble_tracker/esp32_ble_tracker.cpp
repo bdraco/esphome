@@ -321,6 +321,7 @@ void ESP32BLETracker::register_client(ESPBTClient *client) {
 }
 
 void ESP32BLETracker::gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param) {
+  ESP_LOGV(TAG, "GAP Event %i", event);
   BLEEvent *gap_event = new BLEEvent(event, param);  // NOLINT(cppcoreguidelines-owning-memory)
   global_esp32_ble_tracker->ble_events_.push(gap_event);
 }  // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
