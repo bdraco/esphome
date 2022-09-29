@@ -71,6 +71,7 @@ void ESP32BLETracker::setup() {
 }
 
 void ESP32BLETracker::loop() {
+  ESP_LOGD(TAG, "ESP32BLETracker loop");
   BLEEvent *ble_event = this->ble_events_.pop();
   while (ble_event != nullptr) {
     if (ble_event->type_) {
@@ -79,11 +80,15 @@ void ESP32BLETracker::loop() {
     } else {
       this->real_gap_event_handler_(ble_event->event_.gap.gap_event, &ble_event->event_.gap.gap_param);
     }
+
+    ESP_LOGD(TAG, "Deleting BLEEvent with type %i", ble_event->event_.gattc.gattc_event);
+
     delete ble_event;  // NOLINT(cppcoreguidelines-owning-memory)
     ble_event = this->ble_events_.pop();
   }
 
   if (this->scanner_idle_) {
+    ESP_LOGD(TAG, "ESP32BLETracker loop idle, returning");
     return;
   }
 
