@@ -6,6 +6,13 @@
 #include "esphome/core/hal.h"
 #include "esphome/core/helpers.h"
 #include "esphome/core/log.h"
+#include "bt.h"
+#include "esp_gap_ble_api.h"
+#include "esp_gattc_api.h"
+#include "esp_gatt_defs.h"
+#include "esp_bt_main.h"
+#include "esp_gatt_common_api.h"
+
 
 #include <nvs_flash.h>
 #include <freertos/FreeRTOSConfig.h>
