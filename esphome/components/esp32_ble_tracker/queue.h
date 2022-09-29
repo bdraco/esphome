@@ -77,15 +77,19 @@ class BLEEvent {
 
     switch (e) {
       case ESP_GATTC_NOTIFY_EVT:
+        ESP_LOGD("main", "ESP_GATTC_NOTIFY_EVT BLEEvent with type %i: len: %i", e, p->read.value_len);
+
         memcpy(this->event_.gattc.data, p->notify.value, p->notify.value_len);
         this->event_.gattc.gattc_param.notify.value = this->event_.gattc.data;
         break;
       case ESP_GATTC_READ_CHAR_EVT:
       case ESP_GATTC_READ_DESCR_EVT:
-        for(size_t i=0; i<p->read.value_len; i++)
-        {
-          ESP_LOGD("main", "queue BLEEvent with type %i: pos=%i data=%hhx", e, i, p->read.value[i]);
-        }      
+        //for(size_t i=0; i<p->read.value_len; i++)
+        //{
+        //  ESP_LOGD("main", "queue BLEEvent with type %i: pos=%i data=%hhx", e, i, p->read.value[i]);
+        //}      
+        ESP_LOGD("main", "CHAR_DESC BLEEvent with type %i: len: %i", e, p->read.value_len);
+
         memcpy(this->event_.gattc.data, p->read.value, p->read.value_len);
         this->event_.gattc.gattc_param.read.value = this->event_.gattc.data;
         break;
