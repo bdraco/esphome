@@ -93,6 +93,7 @@ class BLEEvent {
         this->event_.gattc.gattc_param.read.value = this->data.data();
         break;
       default:
+        ESP_LOGD("main", "Unhandled BLEEvent with type %id", e);
         break;
     }
     this->type_ = 1;
