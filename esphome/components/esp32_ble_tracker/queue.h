@@ -84,7 +84,7 @@ class BLEEvent {
       case ESP_GATTC_READ_DESCR_EVT:
         for(size_t i=0; i<p->read.value_len; i++)
         {
-          ESP_LOGD("main", "queue BLEEvent with type %i: data=%hhx", e, p->read.value[i]);
+          ESP_LOGD("main", "queue BLEEvent with type %i: pos=%i data=%hhx", e, i, p->read.value[i]);
         }      
         memcpy(this->event_.gattc.data, p->read.value, p->read.value_len);
         this->event_.gattc.gattc_param.read.value = this->event_.gattc.data;
