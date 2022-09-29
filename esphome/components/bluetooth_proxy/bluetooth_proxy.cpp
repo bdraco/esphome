@@ -346,12 +346,15 @@ void BluetoothProxy::bluetooth_gatt_notify(const api::BluetoothGATTNotifyRequest
     return;
   }
 
+
+
   auto *characteristic = this->get_characteristic(msg.handle);
 
   if (characteristic == nullptr) {
     ESP_LOGW(TAG, "Cannot notify GATT characteristic, not found.");
     return;
   }
+  ESP_LOGV(TAG, "Call Notify GATT characteristic %s", characteristic->uuid.to_string().c_str());
 
 
   esp_err_t err;
