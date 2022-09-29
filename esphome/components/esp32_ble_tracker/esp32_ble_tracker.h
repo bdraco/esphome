@@ -113,7 +113,7 @@ class ESPBTDevice {
   }
 
  protected:
-  void parse_adv_(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param);
+  void parse_adv_(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param, bool scan_active);
 
   esp_bd_addr_t address_{
       0,
