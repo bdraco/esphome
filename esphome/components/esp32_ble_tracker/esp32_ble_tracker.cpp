@@ -129,7 +129,7 @@ void ESP32BLETracker::loop() {
     }
     for (size_t i = 0; i < index; i++) {
       ESPBTDevice device;
-      device.parse_scan_rst(this->scan_result_buffer_[i]);
+      device.parse_scan_rst(this->scan_result_buffer_[i], this->_scan_active);
 
       bool found = false;
       for (auto *listener : this->listeners_) {
@@ -582,13 +582,13 @@ optional<ESPBLEiBeacon> ESPBLEiBeacon::from_manufacturer_data(const ServiceData 
   return ESPBLEiBeacon(data.data.data());
 }
 
-void ESPBTDevice::parse_scan_rst(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param) {
+void ESPBTDevice::parse_scan_rst(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param, bool scan_active) {
   this->scan_result_ = param;
   for (uint8_t i = 0; i < ESP_BD_ADDR_LEN; i++)
     this->address_[i] = param.bda[i];
   this->address_type_ = param.ble_addr_type;
   this->rssi_ = param.rssi;
-  this->parse_adv_(param);
+  this->parse_adv_(param, scan_active);
 
 #ifdef ESPHOME_LOG_HAS_VERY_VERBOSE
   ESP_LOGVV(TAG, "Parse Result:");
@@ -644,7 +644,7 @@ void ESPBTDevice::parse_scan_rst(const esp_ble_gap_cb_param_t::ble_scan_result_e
   ESP_LOGVV(TAG, "Adv data: %s", format_hex_pretty(param.ble_adv, param.adv_data_len + param.scan_rsp_len).c_str());
 #endif
 }
-void ESPBTDevice::parse_adv_(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param) {
+void ESPBTDevice::parse_adv_(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param, bool scan_active) {
   size_t offset = 0;
   const uint8_t *payload = param.ble_adv;
   uint8_t len = param.adv_data_len + param.scan_rsp_len;
@@ -793,7 +793,7 @@ void ESPBTDevice::parse_adv_(const esp_ble_gap_cb_param_t::ble_scan_result_evt_p
         // Local Name data type shall not be used to advertise a name that is longer than the Local Name data type."
         // We ignore this, as we use the full name.
         // TODO: only do this if in passive mode
-        if (!this->scan_active_) {
+        if (!scan_active) {
           this->name_ = std::string(reinterpret_cast<const char *>(record), record_length);
         }
         break;
