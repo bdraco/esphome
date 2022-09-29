@@ -272,8 +272,8 @@ void BluetoothProxy::bluetooth_gatt_write(const api::BluetoothGATTWriteRequest &
     return;
   }
 
-  ESP_LOGV(TAG, "Writing GATT characteristic %s -> %s", characteristic->uuid.to_string().c_str(),
-           format_hex_pretty((uint8_t *) msg.data.data(), msg.data.size()).c_str());
+  ESP_LOGV(TAG, "Writing GATT characteristic %s -> %s (response=%i)", characteristic->uuid.to_string().c_str(),
+           format_hex_pretty((uint8_t *) msg.data.data(), msg.data.size()).c_str(), msg.response);
   characteristic->write_value((uint8_t *) msg.data.data(), msg.data.size(),
                               msg.response ? ESP_GATT_WRITE_TYPE_RSP : ESP_GATT_WRITE_TYPE_NO_RSP);
 }
