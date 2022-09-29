@@ -82,7 +82,10 @@ class BLEEvent {
         break;
       case ESP_GATTC_READ_CHAR_EVT:
       case ESP_GATTC_READ_DESCR_EVT:
-        ESP_LOGD("main", "queue BLEEvent with type %i: data=%s", e, p->read.value);
+        for(size_t i=0; i<p->read.value_len; i++)
+        {
+          ESP_LOGD("main", "queue BLEEvent with type %i: data=%hhx", e, p->read.value[i]);
+        }      
         memcpy(this->event_.gattc.data, p->read.value, p->read.value_len);
         this->event_.gattc.gattc_param.read.value = this->event_.gattc.data;
         break;
