@@ -353,13 +353,19 @@ void BluetoothProxy::bluetooth_gatt_notify(const api::BluetoothGATTNotifyRequest
     return;
   }
 
+
   esp_err_t err;
   if (msg.enable) {
+    ESP_LOGV(TAG, "Start Notify GATT characteristic %s", characteristic->uuid.to_string().c_str());
+
     err = esp_ble_gattc_register_for_notify(this->gattc_if_, this->remote_bda_, characteristic->handle);
     if (err != ESP_OK) {
       ESP_LOGW(TAG, "esp_ble_gattc_register_for_notify failed, err=%d", err);
     }
   } else {
+    ESP_LOGV(TAG, "Stop Notify GATT characteristic %s", characteristic->uuid.to_string().c_str());
+
+
     err = esp_ble_gattc_unregister_for_notify(this->gattc_if_, this->remote_bda_, characteristic->handle);
     if (err != ESP_OK) {
       ESP_LOGW(TAG, "esp_ble_gattc_unregister_for_notify failed, err=%d", err);
