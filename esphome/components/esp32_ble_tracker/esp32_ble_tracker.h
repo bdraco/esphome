@@ -13,6 +13,27 @@
 #include <esp_gattc_api.h>
 #include <esp_bt_defs.h>
 
+
+void * operator new( size_t size )
+{
+    return pvPortMalloc(size);
+}
+
+void * operator new[]( size_t size )
+{
+    return pvPortMalloc( size );
+}
+
+void operator delete( void * ptr )
+{
+    vPortFree( ptr );
+}
+
+void operator delete[]( void * ptr )
+{
+    vPortFree( ptr );
+}
+
 namespace esphome {
 namespace esp32_ble_tracker {
 
