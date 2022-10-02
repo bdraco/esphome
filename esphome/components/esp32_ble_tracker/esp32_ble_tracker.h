@@ -14,22 +14,22 @@
 #include <esp_bt_defs.h>
 
 
-void * operator new( size_t size )
+inline void * operator new( size_t size )
 {
     return pvPortMalloc(size);
 }
 
-void * operator new[]( size_t size )
+inline void * operator new[]( size_t size )
 {
     return pvPortMalloc( size );
 }
 
-void operator delete( void * ptr )
+inline void operator delete( void * ptr )
 {
     vPortFree( ptr );
 }
 
-void operator delete[]( void * ptr )
+inline void operator delete[]( void * ptr )
 {
     vPortFree( ptr );
 }
