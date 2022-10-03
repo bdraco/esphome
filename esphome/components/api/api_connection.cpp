@@ -983,7 +983,7 @@ bool APIConnection::send_buffer(ProtoWriteBuffer buffer, uint32_t message_type) 
     if (!this->helper_->can_write_without_blocking()) {
       // SubscribeLogsResponse
       if (message_type != 29) {
-        ESP_LOGV(TAG, "Cannot send message because of TCP buffer space -- pending data: %s", buffer.get_buffer()->data().c_str());
+        ESP_LOGV(TAG, "Cannot send message because of TCP buffer space -- pending data: %s", buffer.get_buffer()->data());
 
       }
       delay(0);
