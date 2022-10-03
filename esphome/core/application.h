@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-#include "esphome/core/compat.h"
 #include "esphome/core/defines.h"
 #include "esphome/core/preferences.h"
 #include "esphome/core/component.h"

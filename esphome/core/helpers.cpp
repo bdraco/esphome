@@ -28,6 +28,7 @@
 #include "esp_efuse_table.h"
 #endif
 
+
 namespace esphome {
 
 // STL backports
