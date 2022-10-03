@@ -31,25 +31,6 @@
 #include <esp32-hal-bt.h>
 #endif
 
-inline void * operator new( size_t size )
-{
-    return pvPortMalloc(size);
-}
-
-inline void * operator new[]( size_t size )
-{
-    return pvPortMalloc( size );
-}
-
-inline void operator delete( void * ptr )
-{
-    vPortFree( ptr );
-}
-
-inline void operator delete[]( void * ptr )
-{
-    vPortFree( ptr );
-}
 
 // bt_trace.h
 #undef TAG

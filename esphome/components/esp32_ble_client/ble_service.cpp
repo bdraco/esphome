@@ -5,26 +5,6 @@
 
 #ifdef USE_ESP32
 
-inline void * operator new( size_t size )
-{
-    return pvPortMalloc(size);
-}
-
-inline void * operator new[]( size_t size )
-{
-    return pvPortMalloc( size );
-}
-
-inline void operator delete( void * ptr )
-{
-    vPortFree( ptr );
-}
-
-inline void operator delete[]( void * ptr )
-{
-    vPortFree( ptr );
-}
-
 
 namespace esphome {
 namespace esp32_ble_client {
