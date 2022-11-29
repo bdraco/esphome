@@ -31,7 +31,7 @@ namespace esphome {
 namespace esp32_ble_tracker {
 
 static const char *const TAG = "esp32_ble_tracker";
-static const uint64_t UUID_UINT64_PAIR_32BIT_LOW = 9223372203208626833;
+static const uint64_t UUID_UINT64_PAIR_32BIT_LOW = 9223372203208626833ULL;
 
 ESP32BLETracker *global_esp32_ble_tracker = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
