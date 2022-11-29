@@ -31,7 +31,7 @@ namespace esphome {
 namespace esp32_ble_tracker {
 
 static const char *const TAG = "esp32_ble_tracker";
-static const uint64_t LOW_32BIT_UUID_UINT64_PAIR = 9223372203208626833;
+static const uint64_t UUID_UINT64_PAIR_32BIT_LOW = 9223372203208626833;
 ESP32BLETracker *global_esp32_ble_tracker = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 uint64_t ble_addr_to_uint64(const esp_bd_addr_t address) {
@@ -584,9 +584,9 @@ uint64_t ESPBTUUID::get_128bit_high() const {
 uint64_t ESPBTUUID::get_128bit_low() const {
   switch (this->uuid_.len) {
     case ESP_UUID_LEN_16:
-      return LOW_32BIT_UUID_UINT64_PAIR;
+      return UUID_UINT64_PAIR_32BIT_LOW;
     case ESP_UUID_LEN_32:
-      return LOW_32BIT_UUID_UINT64_PAIR;
+      return UUID_UINT64_PAIR_32BIT_LOW;
     default:
     case ESP_UUID_LEN_128:
       return ((uint64_t) this->uuid_.uuid.uuid128[7] << 56) | ((uint64_t) this->uuid_.uuid.uuid128[6] << 48) |
