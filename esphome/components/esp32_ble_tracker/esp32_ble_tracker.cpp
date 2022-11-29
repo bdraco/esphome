@@ -31,7 +31,7 @@ namespace esphome {
 namespace esp32_ble_tracker {
 
 static const char *const TAG = "esp32_ble_tracker";
-
+static const uint64_t LOW_32BIT_UUID_UINT64_PAIR = 9223372203208626833;
 ESP32BLETracker *global_esp32_ble_tracker = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 uint64_t ble_addr_to_uint64(const esp_bd_addr_t address) {
@@ -581,12 +581,12 @@ uint64_t ESPBTUUID::get_128bit_high() const {
          ((uint64_t) uuid.uuid.uuid128[9] << 8) | ((uint64_t) uuid.uuid.uuid128[8]);
 }
 
-uint64_t ESPBTUUID::get_128bit_low_fast() const {
+uint64_t ESPBTUUID::get_128bit_low() const {
   switch (this->uuid_.len) {
     case ESP_UUID_LEN_16:
-      return (uint64_t) 9223372203208626833;
+      return LOW_32BIT_UUID_UINT64_PAIR;
     case ESP_UUID_LEN_32:
-      return (uint64_t) 9223372203208626833;
+      return LOW_32BIT_UUID_UINT64_PAIR;
     default:
     case ESP_UUID_LEN_128:
       return ((uint64_t) this->uuid_.uuid.uuid128[7] << 56) | ((uint64_t) this->uuid_.uuid.uuid128[6] << 48) |
@@ -594,14 +594,6 @@ uint64_t ESPBTUUID::get_128bit_low_fast() const {
              ((uint64_t) this->uuid_.uuid.uuid128[3] << 24) | ((uint64_t) this->uuid_.uuid.uuid128[2] << 16) |
              ((uint64_t) this->uuid_.uuid.uuid128[1] << 8) | ((uint64_t) this->uuid_.uuid.uuid128[0]);
   }
-}
-
-uint64_t ESPBTUUID::get_128bit_low() const {
-  esp_bt_uuid_t uuid = this->as_128bit().get_uuid();
-  return ((uint64_t) uuid.uuid.uuid128[7] << 56) | ((uint64_t) uuid.uuid.uuid128[6] << 48) |
-         ((uint64_t) uuid.uuid.uuid128[5] << 40) | ((uint64_t) uuid.uuid.uuid128[4] << 32) |
-         ((uint64_t) uuid.uuid.uuid128[3] << 24) | ((uint64_t) uuid.uuid.uuid128[2] << 16) |
-         ((uint64_t) uuid.uuid.uuid128[1] << 8) | ((uint64_t) uuid.uuid.uuid128[0]);
 }
 
 ESPBLEiBeacon::ESPBLEiBeacon(const uint8_t *data) { memcpy(&this->beacon_data_, data, sizeof(beacon_data_)); }

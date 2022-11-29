@@ -45,7 +45,6 @@ class ESPBTUUID {
 
   uint64_t get_128bit_high() const;
   uint64_t get_128bit_low() const;
-  uint64_t get_128bit_low_fast() const;
 
  protected:
   esp_bt_uuid_t uuid_;
