@@ -112,6 +112,8 @@ void BluetoothProxy::loop() {
         api::BluetoothGATTCharacteristic characteristic_resp;
         auto char_uuid = espbt::ESPBTUUID::from_uuid(char_result.uuid);
         characteristic_resp.uuid = {char_uuid.get_128bit_high(), char_uuid.get_128bit_low()};
+        ESP_LOGW(TAG, "Characteristic %s high=%llu low=%llu low_fast=%llu", char_uuid.to_string().c_str(),
+                 char_uuid.get_128bit_high(), char_uuid.get_128bit_low() char_uuid.get_128bit_low_fast());
         characteristic_resp.handle = char_result.char_handle;
         characteristic_resp.properties = char_result.properties;
         char_offset++;
