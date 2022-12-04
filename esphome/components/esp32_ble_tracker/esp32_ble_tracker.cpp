@@ -24,6 +24,11 @@
 #include <esp32-hal-bt.h>
 #endif
 
+#ifdef USE_ESP_IDF
+// https://github.com/espressif/esp-idf/issues/2503
+#define BTU_TASK_STACK_SIZE (6144 + BT_TASK_EXTRA_STACK_SIZE)
+#endif
+
 // bt_trace.h
 #undef TAG
 
@@ -180,8 +185,13 @@ void ESP32BLETracker::loop() {
         ESP_LOGE(TAG, "ESP-IDF BLE scan could not restart after 255 attempts, rebooting to restore BLE stack...");
         App.reboot();
       }
-      esp_ble_gap_stop_scanning();
-      this->cancel_timeout("scan");
+      if (xSemaphoreTake(this->scan_end_lock_, 0L)) {
+        xSemaphoreGive(this->scan_end_lock_);
+      } else {
+        ESP_LOGD(TAG, "Stopping scan after failure...");
+        esp_ble_gap_stop_scanning();
+        this->cancel_timeout("scan");
+      }
       if (this->scan_start_failed_) {
         ESP_LOGE(TAG, "Scan start failed: %d", this->scan_start_failed_);
         this->scan_start_failed_ = ESP_BT_STATUS_SUCCESS;
@@ -200,10 +210,17 @@ void ESP32BLETracker::loop() {
   if (promote_to_connecting) {
     for (auto *client : this->clients_) {
       if (client->state() == ClientState::DISCOVERED) {
-        ESP_LOGD(TAG, "Pausing scan to make connection...");
-        esp_ble_gap_stop_scanning();
-        // We only want to promote one client at a time.
-        client->set_state(ClientState::READY_TO_CONNECT);
+        if (xSemaphoreTake(this->scan_end_lock_, 0L)) {
+          // Scanner is not running since we got the
+          // lock, so we can promote the client.
+          xSemaphoreGive(this->scan_end_lock_);
+          // We only want to promote one client at a time.
+          // once the scanner is fully stopped.
+          client->set_state(ClientState::READY_TO_CONNECT);
+        } else {
+          ESP_LOGD(TAG, "Pausing scan to make connection...");
+          esp_ble_gap_stop_scanning();
+        }
         break;
       }
     }
