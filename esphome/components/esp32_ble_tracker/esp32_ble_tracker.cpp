@@ -20,6 +20,10 @@
 #include "esphome/components/ota/ota_component.h"
 #endif
 
+#ifdef USE_BLUETOOTH_PROXY
+#include "esphome/components/api/api_server.h"
+#endif
+
 #ifdef USE_ARDUINO
 #include <esp32-hal-bt.h>
 #endif
@@ -31,6 +35,12 @@ namespace esphome {
 namespace esp32_ble_tracker {
 
 static const char *const TAG = "esp32_ble_tracker";
+
+#ifdef USE_BLUETOOTH_PROXY
+static int MAX_BLE_GAP_EVENTS = 32;
+#else
+static int MAX_BLE_GAP_EVENTS = 16;
+#endif
 
 ESP32BLETracker *global_esp32_ble_tracker = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
@@ -117,8 +127,21 @@ void ESP32BLETracker::loop() {
         xSemaphoreTake(this->scan_result_lock_, 5L / portTICK_PERIOD_MS)) {
       uint32_t index = this->scan_result_index_;
       if (index) {
-        if (index >= 16) {
+        if (index >= MAX_BLE_GAP_EVENTS) {
           ESP_LOGW(TAG, "Too many BLE events to process. Some devices may not show up.");
+        }
+        if (this->api_ble_scan_processing_) {
+          api::BluetoothUnparsedLEAdvertisementResponse resp;
+          for (size_t i = 0; i < index; i++) {
+            api::BluetoothUnparsedLEAdvertisement adv;
+            adv.rssi = this->scan_result_buffer_[i].rssi;
+            adv.address = ble_addr_to_uint64(this->scan_result_buffer_[i].address);
+            adv.address_type = this->scan_result_buffer_[i].address_type;
+            adv.adv_data_len = this->scan_result_buffer_[i].adv_data_len;
+            adv.assign(this->scan_result_buffer_[i].data.begin(), this->scan_result_buffer_[i].data.end());
+            resp.advertisements.push_back(std::move(adv));
+          }
+
         }
         for (size_t i = 0; i < index; i++) {
           ESPBTDevice device;
@@ -416,7 +439,7 @@ void ESP32BLETracker::gap_scan_stop_complete_(const esp_ble_gap_cb_param_t::ble_
 void ESP32BLETracker::gap_scan_result_(const esp_ble_gap_cb_param_t::ble_scan_result_evt_param &param) {
   if (param.search_evt == ESP_GAP_SEARCH_INQ_RES_EVT) {
     if (xSemaphoreTake(this->scan_result_lock_, 0L)) {
-      if (this->scan_result_index_ < 16) {
+      if (this->scan_result_index_ < MAX_BLE_GAP_EVENTS) {
         this->scan_result_buffer_[this->scan_result_index_++] = param;
       }
       xSemaphoreGive(this->scan_result_lock_);

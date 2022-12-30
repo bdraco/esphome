@@ -1335,3 +1335,19 @@ message BluetoothGATTNotifyResponse {
   uint64 address = 1;
   uint32 handle = 2;
 }
+
+message BluetoothUnparsedLEAdvertisement {
+  uint64 address = 1;
+  sint32 rssi = 2;
+  uint32 adv_data_len = 3;
+  uint32 address_type = 4;
+  bytes data = 5;
+}
+
+message BluetoothUnparsedLEAdvertisementResponse {
+  option (id) = 85;
+  option (source) = SOURCE_SERVER;
+  option (ifdef) = "USE_BLUETOOTH_PROXY";
+
+  repeated BluetoothUnparsedLEAdvertisement advertisements = 1;
+}

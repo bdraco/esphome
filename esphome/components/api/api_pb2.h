@@ -1525,6 +1525,33 @@ class BluetoothGATTNotifyResponse : public ProtoMessage {
  protected:
   bool decode_varint(uint32_t field_id, ProtoVarInt value) override;
 };
+class BluetoothUnparsedLEAdvertisement : public ProtoMessage {
+ public:
+  uint64_t address{0};
+  int32_t rssi{0};
+  uint32_t adv_data_len{0};
+  uint32_t address_type{0};
+  std::string data{};
+  void encode(ProtoWriteBuffer buffer) const override;
+#ifdef HAS_PROTO_MESSAGE_DUMP
+  void dump_to(std::string &out) const override;
+#endif
+
+ protected:
+  bool decode_length(uint32_t field_id, ProtoLengthDelimited value) override;
+  bool decode_varint(uint32_t field_id, ProtoVarInt value) override;
+};
+class BluetoothUnparsedLEAdvertisementResponse : public ProtoMessage {
+ public:
+  std::vector<BluetoothUnparsedLEAdvertisement> advertisements{};
+  void encode(ProtoWriteBuffer buffer) const override;
+#ifdef HAS_PROTO_MESSAGE_DUMP
+  void dump_to(std::string &out) const override;
+#endif
+
+ protected:
+  bool decode_length(uint32_t field_id, ProtoLengthDelimited value) override;
+};
 
 }  // namespace api
 }  // namespace esphome

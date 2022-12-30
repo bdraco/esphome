@@ -154,8 +154,7 @@ class APIServerConnectionBase : public ProtoService {
 #ifdef USE_MEDIA_PLAYER
   virtual void on_media_player_command_request(const MediaPlayerCommandRequest &value){};
 #endif
-  virtual void on_subscribe_bluetooth_le_advertisements_request(
-      const SubscribeBluetoothLEAdvertisementsRequest &value){};
+  virtual void on_subscribe_bluetooth_le_advertisements_request(const SubscribeBluetoothLEAdvertisementsRequest &value){};
 #ifdef USE_BLUETOOTH_PROXY
   bool send_bluetooth_le_advertisement_response(const BluetoothLEAdvertisementResponse &msg);
 #endif
@@ -209,6 +208,9 @@ class APIServerConnectionBase : public ProtoService {
 #endif
 #ifdef USE_BLUETOOTH_PROXY
   bool send_bluetooth_gatt_notify_response(const BluetoothGATTNotifyResponse &msg);
+#endif
+#ifdef USE_BLUETOOTH_PROXY
+  bool send_bluetooth_unparsed_le_advertisement_response(const BluetoothUnparsedLEAdvertisementResponse &msg);
 #endif
  protected:
   bool read_message(uint32_t msg_size, uint32_t msg_type, uint8_t *msg_data) override;
@@ -284,8 +286,7 @@ class APIServerConnection : public APIServerConnectionBase {
   virtual void bluetooth_gatt_notify(const BluetoothGATTNotifyRequest &msg) = 0;
 #endif
 #ifdef USE_BLUETOOTH_PROXY
-  virtual BluetoothConnectionsFreeResponse subscribe_bluetooth_connections_free(
-      const SubscribeBluetoothConnectionsFreeRequest &msg) = 0;
+  virtual BluetoothConnectionsFreeResponse subscribe_bluetooth_connections_free(const SubscribeBluetoothConnectionsFreeRequest &msg) = 0;
 #endif
  protected:
   void on_hello_request(const HelloRequest &msg) override;
