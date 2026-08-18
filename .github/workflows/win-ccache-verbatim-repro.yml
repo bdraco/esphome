@@ -1,0 +1,21 @@
+name: win-ccache-verbatim-repro
+
+on:
+  push:
+    branches: [win-ccache-verbatim-repro]
+
+jobs:
+  windows-pytest:
+    name: pytest ccache tests on windows-latest
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install esphome from this branch with test deps
+        run: |
+          pip install -r requirements_test.txt
+          pip install -e .
+      - name: Run the ccache tests (includes the cmd.exe e2e)
+        run: pytest -vv --no-cov tests/unit_tests/test_platformio_toolchain.py -k "ccache or strip_win" -rs
